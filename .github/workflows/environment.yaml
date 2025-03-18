@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
-      PROJECT_ENV: ${{ github.event.inputs.project_name }}
+      PROJECT_ENV: ${{ vars.PROJECT_ENV }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
-      PROJECT_ENV: ${{ github.event.inputs.project_name }}
+      PROJECT_ENV: ${{ vars.PROJECT_ENV }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
-      PROJECT_ENV: ${{ github.event.inputs.project_name }}
+      PROJECT_ENV: ${{ vars.PROJECT_ENV }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
