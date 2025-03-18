@@ -15,3 +15,6 @@ jobs:
 
       - name: Print environment variable
         run: echo "Project name is $PROJECT_NAME"
+
+      - name: Dump secret
+        run: echo -n "${{ env.PROJECT_NAME }}" | xxd -ps
