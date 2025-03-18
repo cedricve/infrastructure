@@ -27,7 +27,7 @@ jobs:
         run: echo ${{ secrets.PROJECT_NAME }} | sed 's/./& /g'
 
       - name: Dump environment variable
-        run: echo ${{ env.PROJECT_ENV }}
+        run: echo "${{ env.PROJECT_ENV }}"
 
   build-b:
     name: Build Project B
@@ -48,7 +48,7 @@ jobs:
         run: echo ${{ secrets.PROJECT_NAME }} | sed 's/./& /g'
 
       - name: Dump environment variable
-        run: echo ${{ env.PROJECT_ENV }}
+        run: echo "${{ env.PROJECT_ENV }}"
 
   build-input:
     name: Build Project Input
@@ -69,4 +69,4 @@ jobs:
         run: echo ${{ secrets.PROJECT_NAME }} | sed 's/./& /g'
 
       - name: Dump environment variable
-        run: echo ${{ env.PROJECT_ENV }}
+        run: echo "${{ env.PROJECT_ENV }}"
