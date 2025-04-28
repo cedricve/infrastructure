@@ -15,12 +15,12 @@ jobs:
     #  name: project-b
     runs-on: ubuntu-latest
     steps:
-      - uses: octokit/request-action@v2.x
+      - uses: octokit/request-action@v2.4.0
         id: get_release
         with:
-          route: GET /repos/{owner}/{repo}/releases/tag/v1.0.0
-          owner: cedricve
-          repo: infrastructure
+          route: GET /repos/{owner}/{repo}/releases/v1.0.0
+          owner: ${{ github.repository_owner }}
+          repo: ${{ github.event.repository.name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: "echo Release found: '${{ steps.get_release.outputs.data }}'"
