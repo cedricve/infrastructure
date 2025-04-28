@@ -15,7 +15,7 @@ jobs:
     #  name: project-b
     runs-on: ubuntu-latest
     steps:
-      - uses: octokit/request-action@v2.x
+      - uses: octokit/request-action@v2.4.0
         id: get_release
         with:
           route: GET /repos/cedricve/infrastructure/releases/v1.0.0
