@@ -1,4 +1,4 @@
-name: GitHub Create Deployment Environment
+name: Create Deployment Environment
 on:
   workflow_dispatch:
     inputs:
@@ -10,7 +10,7 @@ on:
 jobs:
   # This will create a GitHub environment through the GitHub API
   create-environment:
-    name: Create GitHub Environment
+    name: Get GitHub Environments
     #environment:
     #  name: project-b
     runs-on: ubuntu-latest
@@ -18,7 +18,7 @@ jobs:
       - uses: octokit/request-action@v2.4.0
         id: get_release
         with:
-          route: GET /repos/{owner}/{repo}/releases/v1.0.0
+          route: GET /repos/{owner}/{repo}/environments
           owner: ${{ github.repository_owner }}
           repo: ${{ github.event.repository.name }}
         env:
