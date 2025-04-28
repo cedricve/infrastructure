@@ -18,7 +18,7 @@ jobs:
       - uses: octokit/request-action@v2.x
         id: get_release
         with:
-          route: GET /repos/cedricve/infrastructure/releases/v1.0/0
+          route: GET /repos/cedricve/infrastructure/releases/v1.0.0
           owner: octokit
           repo: request-action
         env:
