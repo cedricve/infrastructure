@@ -19,8 +19,6 @@ jobs:
         id: get_release
         with:
           route: GET /repos/cedricve/infrastructure/releases/v1.0.0
-          owner: octokit
-          repo: request-action
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
       - run: "echo Release found: '${{ steps.get_release.outputs.data }}'"
