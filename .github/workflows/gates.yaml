@@ -1,0 +1,29 @@
+name: GitHub Actions Gates
+on:
+  workflow_dispatch:
+    inputs:
+      project_name:
+        description: "Project name"
+        required: true
+        default: "project-a"
+
+jobs:
+  build-project-a:
+    name: Clone Project A
+    environment:
+      name: project-a
+    runs-on: ubuntu-latest
+    env:
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+  build-b:
+    name: Clone Project B
+    environment:
+      name: project-b
+    needs: build-project-a
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
