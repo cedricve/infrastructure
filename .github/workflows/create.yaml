@@ -18,6 +18,8 @@ jobs:
       - name: Create GitHub Environment
         id: create-env
         uses: octokit/request-action@v2.4.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
         with:
           route: POST /repos/${{ github.repository }}/environments
           environment_name: ${{ github.event.inputs.project_name }}
