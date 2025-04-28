@@ -15,14 +15,14 @@ jobs:
     #  name: project-b
     runs-on: ubuntu-latest
     steps:
-      - uses: octokit/request-action@v2.4.0
+      - uses: octokit/request-action@v2.x
         id: get_release
         with:
           route: GET /repos/{owner}/{repo}/releases/v1.0.0
           owner: cedricve
           repo: infrastructure
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: "echo Release found: '${{ steps.get_release.outputs.data }}'"
       - run: "echo Release could not be found. Request failed with status '${{ steps.get_release.outputs.status }}'"
         if: ${{ failure() }}
