@@ -11,7 +11,7 @@ jobs:
   build-project-a:
     name: Clone Project A
     environment:
-      name: project-a
+      name: project-b
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
