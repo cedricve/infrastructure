@@ -15,36 +15,14 @@ jobs:
     #  name: project-b
     runs-on: ubuntu-latest
     steps:
-      - name: Create GitHub Environment
-        id: create-env
-        uses: octokit/request-action@v2.4.0
+      - uses: octokit/request-action@v2.x
+        id: get_release
+        with:
+          route: GET /repos/cedricve/infrastructure/releases/v1.0/0
+          owner: octokit
+          repo: request-action
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
-        with:
-          route: POST /repos/${{ github.repository }}/environments
-          environment_name: ${{ github.event.inputs.project_name }}
-          environment_url: ${{ github.event.inputs.project_name }}
-          environment_description: "Environment for ${{ github.event.inputs.project_name }}"
-          environment_protection_rules: |
-            {
-              "wait_timer": {
-                "enabled": true,
-                "wait_timer": 60
-              }
-            }
-          environment_review_protection_rules: |
-            {
-              "wait_timer": {
-                "enabled": true,
-                "wait_timer": 60
-              }
-            }
-          environment_deployment_branch_policy: |
-            {
-              "protected_branches": {
-                "enabled": true,
-                "protected_branches": [
-                  "main"
-                ]
-              }
-            }
+      - run: "echo Release found: '${{ steps.get_release.outputs.data }}'"
+      - run: "echo Release could not be found. Request failed with status '${{ steps.get_release.outputs.status }}'"
+        if: ${{ failure() }}
