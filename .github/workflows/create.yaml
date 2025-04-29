@@ -18,7 +18,7 @@ jobs:
       - uses: octokit/request-action@v2.4.0
         id: get_release
         with:
-          route: GET /repos/{owner}/{repo}/environments
+          route: GET /repos/{owner}/{repo}/environments/{project_name}
           owner: ${{ github.repository_owner }}
           repo: ${{ github.event.repository.name }}
         env:
