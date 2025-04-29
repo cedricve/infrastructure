@@ -15,7 +15,11 @@ jobs:
     #  name: project-b
     runs-on: ubuntu-latest
     steps:
-      - uses: octokit/request-action@v2.4.0
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20' # Ensure Node.js 20 or higher is used
+      - uses: octokit/request-action@v2.x
         id: get_release
         with:
           route: GET /repos/{owner}/{repo}/environments/{project_name}
