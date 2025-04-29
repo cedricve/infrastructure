@@ -6,14 +6,22 @@ on:
         description: "Project name"
         required: true
         default: "project-a"
-
+      secret_name:
+        description: "Secret name"
+        required: true
+        default: "my-secret"
 jobs:
-  # This will create a GitHub environment through the GitHub API
-  create-environment:
+  # This will lookup a GitHub environment through the GitHub API
+  lookup-environment:
     name: Get GitHub Environments
     #environment:
     #  name: project-b
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      OWNER: "cedricve" #${{ github.repository_owner }}
+      REPO: "infrastructure" #${{ github.event.repository.name }}
+      PROJECT_NAME: "project-a" #${{ github.event.inputs.project_name }}
     steps:
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -22,11 +30,79 @@ jobs:
       - uses: octokit/request-action@v2.x
         id: get_release
         with:
-          route: GET /repos/{owner}/{repo}/environments/{project_name}
-          owner: ${{ github.repository_owner }}
-          repo: ${{ github.event.repository.name }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: "echo Release found: '${{ steps.get_release.outputs.data }}'"
-      - run: "echo Release could not be found. Request failed with status '${{ steps.get_release.outputs.status }}'"
+          route: GET /repos/{owner}/{repo}/environments/${{ env.PROJECT_NAME }}
+          owner: ${{ env.OWNER }}
+          repo: ${{ env.REPO }}
+      - run: "echo Environment found: '${{ steps.get_release.outputs.data }}'"
+        if: ${{ success() }}
+      - run: "echo Environment could not be found. Request failed with status '${{ steps.get_release.outputs.status }}'"
+        if: ${{ failure() }}
+  # This will create a GitHub environment through the GitHub API if does not exist
+  create-environment:
+    name: Create GitHub Environment
+    needs: lookup-environment
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      OWNER: "cedricve" #${{ github.repository_owner }}
+      REPO: "infrastructure" #${{ github.event.repository.name }}
+      PROJECT_NAME: "project-z" #${{ github.event.inputs.project_name }}
+    steps:
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20' # Ensure Node.js 20 or higher is used
+      - uses: octokit/request-action@v2.x
+        id: create_environment
+        with:
+          route: POST /repos/{owner}/{repo}/environments/${{ env.PROJECT_NAME }}
+          owner: ${{ env.OWNER }}
+          repo: ${{ env.REPO }}
+      - run: "echo Environment created successfully: '${{ steps.get_release.outputs.data }}'"
+        if: ${{ success() }}
+      - run: exit 0
+        if: ${{ success() }}
+      - run: "echo Environment could not be created. Request failed with status '${{ steps.get_release.outputs.status }}'"
+        if: ${{ failure() }}
+  add-secrets-from-azure-keyvault:
+    name: Add secret to environment from Azure Key Vault
+    needs: create-environment
+    runs-on: ubuntu-latest
+    matrix:
+      secret_name: [my-secret, my-secret2, my-secret3]
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      OWNER: "cedricve" #${{ github.repository_owner }}
+      REPO: "infrastructure" #${{ github.event.repository.name }}
+      PROJECT_NAME: "project-a" #${{ github.event.inputs.project_name }}
+      KEY_VAULT_NAME: "keyvault512-swedencentral" # Replace with your Key Vault name
+    steps:
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20' # Ensure Node.js 20 or higher is used
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Azure CLI script
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az keyvault secret show --name ${{ matrix.secret_name }} --vault-name ${{ env.KEY_VAULT_NAME }} --query value -o tsv > secret_value
+            echo "##[set-output name=secret_value;]$(cat secret_value)"
+      - uses: octokit/request-action@v2.x
+        id: add_secret
+        with:
+          route: PUT /repos/{owner}/{repo}/environments/${{ env.PROJECT_NAME }}/secrets/${{ matrix.secret_name }}
+          owner: ${{ env.OWNER }}
+          repo: ${{ env.REPO }}
+          secret_name: ${{ matrix.secret_name }}
+          encrypted_value: ${{ steps.azure_cli.outputs.secret_value }}
+      - run: "echo Secret added successfully"
+        if: ${{ success() }}
+      - run: exit 0
+        if: ${{ success() }}
+      - run: "echo Secret could not be added. Request failed with status '${{ steps.get_release.outputs.status }}'"
         if: ${{ failure() }}
