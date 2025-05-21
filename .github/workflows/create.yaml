@@ -125,8 +125,8 @@ jobs:
           echo "Directory created: 'aro-spoke/${{ github.event.inputs.project_name }}/${{ github.event.inputs.environment_name }}'"
       - name: Copy default.tfvars to new directory.
         run: |
-          cp aro-spoke/default.tfvars aro-spoke/${{ github.event.inputs.project_name }}/${{ github.event.inputs.environment_name }}/default.tfvars
-          echo "File copied: 'aro-spoke/${{ github.event.inputs.project_name }}/${{ github.event.inputs.environment_name }}/default.tfvars'"
+          cp aro-spoke/default.tfvars aro-spoke/${{ github.event.inputs.project_name }}/${{ github.event.inputs.environment_name }}/terraform.tfvars
+          echo "File copied: 'aro-spoke/${{ github.event.inputs.project_name }}/${{ github.event.inputs.environment_name }}/terraform.tfvars'"
       - name: Commit and push changes
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
