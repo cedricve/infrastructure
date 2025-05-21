@@ -109,28 +109,28 @@ jobs:
         if: ${{ success() }}
       - run: "echo environment could not be added. Request failed with status '${{ steps.get_release.outputs.status }}'"
         if: ${{ failure() }}
-    prepare-configuration-files:
-      name: Prepare configuration files, this will create a folder in the "aro-spoke" repository representing PROJECT_NAME/ENVIRONMENT_NAME
-      needs: create-environment
-      if: ${{ failure() }}
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout repository
-          uses: actions/checkout@v2
-          with:
-            repository: ${{ github.repository }}
-        - name: Create directories
-          run: |
-            mkdir -p aro-spoke/${{ github.event.inputs.project_name }}/${{ github.event.inputs.environment_name }}
-            echo "Directory created: 'aro-spoke/${{ github.event.inputs.project_name }}/${{ github.event.inputs.environment_name }}'"
-        - name: Copy default.tfvars to new directory.
-          run: |
-            cp aro-spoke/default.tfvars aro-spoke/${{ github.event.inputs.project_name }}/${{ github.event.inputs.environment_name }}/default.tfvars
-            echo "File copied: 'aro-spoke/${{ github.event.inputs.project_name }}/${{ github.event.inputs.environment_name }}/default.tfvars'"
-        - name: Commit and push changes
-          run: |
-            git config --local user.name "GitHub Actions"
-            git config --local user.email "noreply@github.com"
-            git add aro-spoke/${{ github.event.inputs.project_name }}/${{ github.event.inputs.environment_name }}
-            git commit -m "Create environment ${GITHUB_REF} for project ${GITHUB_REPOSITORY}"
-            git push
+  prepare-configuration-files:
+    name: Prepare configuration files, this will create a folder in the "aro-spoke" repository representing PROJECT_NAME/ENVIRONMENT_NAME
+    needs: create-environment
+    if: ${{ failure() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ github.repository }}
+      - name: Create directories
+        run: |
+          mkdir -p aro-spoke/${{ github.event.inputs.project_name }}/${{ github.event.inputs.environment_name }}
+          echo "Directory created: 'aro-spoke/${{ github.event.inputs.project_name }}/${{ github.event.inputs.environment_name }}'"
+      - name: Copy default.tfvars to new directory.
+        run: |
+          cp aro-spoke/default.tfvars aro-spoke/${{ github.event.inputs.project_name }}/${{ github.event.inputs.environment_name }}/default.tfvars
+          echo "File copied: 'aro-spoke/${{ github.event.inputs.project_name }}/${{ github.event.inputs.environment_name }}/default.tfvars'"
+      - name: Commit and push changes
+        run: |
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "noreply@github.com"
+          git add aro-spoke/${{ github.event.inputs.project_name }}/${{ github.event.inputs.environment_name }}
+          git commit -m "Create environment ${GITHUB_REF} for project ${GITHUB_REPOSITORY}"
+          git push
