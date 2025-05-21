@@ -16,7 +16,7 @@ jobs:
     name: Get GitHub Environments
     runs-on: ubuntu-latest
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.TOKEN }}
       OWNER: ${{ github.repository_owner }}
       REPO: ${{ github.event.repository.name }}
       PROJECT_NAME: ${{ github.event.inputs.project_name }}
@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ failure() }}
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.TOKEN }}
       OWNER: ${{ github.repository_owner }}
       REPO: ${{ github.event.repository.name }}
       PROJECT_NAME: ${{ github.event.inputs.project_name }}
@@ -72,7 +72,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ failure() }}
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.TOKEN }}
       OWNER: ${{ github.repository_owner }}
       REPO: ${{ github.event.repository.name }}
       PROJECT_NAME: ${{ github.event.inputs.project_name }}
