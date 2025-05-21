@@ -109,13 +109,13 @@ jobs:
         if: ${{ success() }}
       - run: "echo environment could not be added. Request failed with status '${{ steps.get_release.outputs.status }}'"
         if: ${{ failure() }}
-    prepare-configuration-files:
-      name: Prepare configuration files, this will create a folder in the "aro-spoke" repository representing PROJECT_NAME/ENVIRONMENT_NAME
-      needs: add-configuration-files
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout repository
-          uses: actions/checkout@v2
-          with:
-            repository: ${{ github.repository }}
+    #prepare-configuration-files:
+    #  name: Prepare configuration files, this will create a folder in the "aro-spoke" repository representing PROJECT_NAME/ENVIRONMENT_NAME
+    #  needs: add-configuration-files
+    #  runs-on: ubuntu-latest
+    #  steps:
+    #    - name: Checkout repository
+    #      uses: actions/checkout@v2
+    #      with:
+    #        repository: ${{ github.repository }}
       
