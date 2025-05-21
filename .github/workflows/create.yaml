@@ -17,11 +17,11 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      OWNER: "cedricve" #${{ github.repository_owner }}
-      REPO: "infrastructure" #${{ github.event.repository.name }}
-      PROJECT_NAME: "project-a" #${{ github.event.inputs.project_name }}
-      ENVIRONMENT_NAME: "dev" #${{ github.event.inputs.environment_name }}
-      FULL_NAME: "project-a-dev" #${{ github.event.inputs.project_name }}-${{ github.event.inputs.environment_name }}
+      OWNER: ${{ github.repository_owner }}
+      REPO: ${{ github.event.repository.name }}
+      PROJECT_NAME: ${{ github.event.inputs.project_name }}
+      ENVIRONMENT_NAME: ${{ github.event.inputs.environment_name }}
+      FULL_NAME: ${{ github.event.inputs.project_name }}-${{ github.event.inputs.environment_name }}
     steps:
       - uses: octokit/request-action@v2.x
         id: get_release
@@ -42,11 +42,11 @@ jobs:
     if: ${{ failure() }}
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      OWNER: "cedricve" #${{ github.repository_owner }}
-      REPO: "infrastructure" #${{ github.event.repository.name }}
-      PROJECT_NAME: "project-a" #${{ github.event.inputs.project_name }}
-      ENVIRONMENT_NAME: "dev" #${{ github.event.inputs.environment_name }}
-      FULL_NAME: "project-a-dev" #${{ github.event.inputs.project_name }}-${{ github.event.inputs.environment_name }}
+      OWNER: ${{ github.repository_owner }}
+      REPO: ${{ github.event.repository.name }}
+      PROJECT_NAME: ${{ github.event.inputs.project_name }}
+      ENVIRONMENT_NAME: ${{ github.event.inputs.environment_name }}
+      FULL_NAME: ${{ github.event.inputs.project_name }}-${{ github.event.inputs.environment_name }}
     steps:
       - uses: octokit/request-action@v2.x
         id: create_environment
@@ -73,11 +73,11 @@ jobs:
     if: ${{ failure() }}
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      OWNER: "cedricve" #${{ github.repository_owner }}
-      REPO: "infrastructure" #${{ github.event.repository.name }}
-      PROJECT_NAME: "project-a" #${{ github.event.inputs.project_name }}
-      ENVIRONMENT_NAME: "dev" #${{ github.event.inputs.environment_name }}
-      FULL_NAME: "project-a-dev" #${{ github.event.inputs.project_name }}-${{ github.event.inputs.environment_name }}
+      OWNER: ${{ github.repository_owner }}
+      REPO: ${{ github.event.repository.name }}
+      PROJECT_NAME: ${{ github.event.inputs.project_name }}
+      ENVIRONMENT_NAME: ${{ github.event.inputs.environment_name }}
+      FULL_NAME: ${{ github.event.inputs.project_name }}-${{ github.event.inputs.environment_name }}
     steps:
       - uses: octokit/request-action@v2.x
         id: add_project_name
