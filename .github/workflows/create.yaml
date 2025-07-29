@@ -114,11 +114,15 @@ jobs:
     needs: create-environment
     if: ${{ failure() }}
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.TOKEN }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: ${{ github.repository }}
+          ref: "main"
+          token: ${{ env.GH_TOKEN }}
       - name: Create directories
         run: |
           mkdir -p aro-spoke/${{ github.event.inputs.project_name }}/${{ github.event.inputs.environment_name }}
@@ -127,14 +131,35 @@ jobs:
         run: |
           cp aro-spoke/default.tfvars aro-spoke/${{ github.event.inputs.project_name }}/${{ github.event.inputs.environment_name }}/terraform.tfvars
           echo "File copied: 'aro-spoke/${{ github.event.inputs.project_name }}/${{ github.event.inputs.environment_name }}/terraform.tfvars'"
-      - name: Commit and push changes
+      - name: Commit and push changes into a new PR
         run: |
+          # ------------------------------
+          # Create a new branch for the changes
+
+          echo "Creating a new branch for the changes"
+          BRANCH_NAME=feature/create-environment-${{ github.event.inputs.project_name }}-${{ github.event.inputs.environment_name }}
+          git checkout -B $BRANCH_NAME
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add aro-spoke/${{ github.event.inputs.project_name }}/${{ github.event.inputs.environment_name }}
-          git commit -m "Create environment ${GITHUB_REF} for project ${GITHUB_REPOSITORY}"
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.TOKEN }}
-          branch: ${{ github.ref }}
+          git commit -m "Create environment ${GITHUB_REF} for ${OWNER}/${REPO}"
+          git push --set-upstream origin $BRANCH_NAME
+
+          # ------------------------------
+          # Check if the PR already exists
+          
+          echo "Checking if pull request already exists"
+          PR_LIST=$(gh pr list --state open --base main --head $BRANCH_NAME --repo $OWNER/$REPO)
+          PR_EXISTS=$(echo "$PR_LIST" | wc -c)
+          if [ $PR_EXISTS -gt 1 ]; then
+            echo "Pull request already exists"
+            exit 0
+          fi
+
+          # -------------------------
+          # Create a new pull request
+
+          echo "Creating pull request on repository"
+          gh pr create --title "Creating a new environment for project ${{ github.event.inputs.project_name }}" \
+            --body "This PR creates a new environment for project `${{ github.event.inputs.project_name }}` with the name `${{ github.event.inputs.environment_name }}`." \
+            --base main --head $BRANCH_NAME --repo ${OWNER}/${REPO}
