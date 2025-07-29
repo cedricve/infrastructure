@@ -29,9 +29,9 @@ jobs:
           route: GET /repos/{owner}/{repo}/environments/${{ env.FULL_NAME }}
           owner: ${{ env.OWNER }}
           repo: ${{ env.REPO }}
-      - run: "echo Environment found: '${{ steps.get_release.outputs.data }}'"
+      - run: "echo Environment found: '${{ steps.get_release.outputs.data }}' "
         if: ${{ success() }}
-      - run: "echo Environment could not be found. Request failed with status '${{ steps.get_release.outputs.status }}', proceeding to create."
+      - run: "echo Environment could not be found. Request failed with status '${{ steps.get_release.outputs.status }}', proceeding to create. && exit 1" 
         if: ${{ failure() }}
   # This will create a GitHub environment through the GitHub API if does not exist
   # Find more information here: https://docs.github.com/en/rest/deployments/environments?apiVersion=2022-11-28#create-or-update-an-environment
@@ -164,6 +164,8 @@ jobs:
           # Create a new pull request
 
           echo "Creating pull request on repository"
+          gh version
+          gh auth login --with-token < ${{ secrets.TOKEN }}
           gh pr create --title "Creating a new environment for project ${{ github.event.inputs.project_name }}" \
             --body "This PR creates a new environment for project `${{ github.event.inputs.project_name }}` with the name `${{ github.event.inputs.environment_name }}`." \
             --base main --head $BRANCH_NAME --repo ${{ env.REPO }}
