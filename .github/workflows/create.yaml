@@ -41,6 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ failure() }}
     env:
+      TEAM_REVIEWER_ID: ${{ secrets.TEAM_REVIEWER_ID }}
       GITHUB_TOKEN: ${{ secrets.TOKEN }}
       OWNER: ${{ github.repository_owner }}
       REPO: ${{ github.event.repository.name }}
@@ -58,8 +59,10 @@ jobs:
             {
               "prevent_self_review": false,
               "deployment_branch_policy": {
-                "protected_branches": false
-              }
+                "protected_branches": false,
+                "custom_branch_policies": false,
+              },
+              "reviewers":[{"type":"Team","id": "${{ env.TEAM_REVIEWER_ID }}"}],
             }
 
       - run: "echo Environment created successfully: '${{ steps.get_release.outputs.data }}'"
