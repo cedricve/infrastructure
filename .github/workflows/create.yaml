@@ -126,7 +126,7 @@ jobs:
         with:
           repository: ${{ env.REPO }}
           ref: "main"
-          token: ${{ env.GH_TOKEN }}
+          #token: ${{ env.GH_TOKEN }}
       - name: Create directories
         run: |
           mkdir -p aro-spoke/${{ github.event.inputs.project_name }}/${{ github.event.inputs.environment_name }}
