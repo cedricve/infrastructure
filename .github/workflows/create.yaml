@@ -54,13 +54,13 @@ jobs:
           route: PUT /repos/{owner}/{repo}/environments/${{ env.FULL_NAME }}
           owner: ${{ env.OWNER }}
           repo: ${{ env.REPO }}
-          #data: |
-          #  {
-          #    "prevent_self_review": false,
-          #    "deployment_branch_policy": {
-          #      "protected_branches": false,
-          #    }
-          #  }
+          data: |
+            {
+              "prevent_self_review": false,
+              "deployment_branch_policy": {
+                "protected_branches": false
+              }
+            }
 
       - run: "echo Environment created successfully: '${{ steps.get_release.outputs.data }}'"
         if: ${{ success() }}
