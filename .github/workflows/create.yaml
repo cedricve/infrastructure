@@ -55,14 +55,14 @@ jobs:
           route: PUT /repos/{owner}/{repo}/environments/${{ env.FULL_NAME }}
           owner: ${{ env.OWNER }}
           repo: ${{ env.REPO }}
-          data: |
-            {
-              "prevent_self_review": false,
-              "deployment_branch_policy": {
-                "protected_branches": true,
-                "custom_branch_policies": false,
-              },
-            }
+          #data: |
+          #  {
+          #     "prevent_self_review": false,
+          #     "deployment_branch_policy": {
+          #      "protected_branches": true,
+          #       "custom_branch_policies": false,
+          #    },
+          #  }
           # "reviewers":[{"type":"Team","id": ${{ env.TEAM_REVIEWER_ID }}}]
 
       - run: "echo Environment created successfully: '${{ steps.get_release.outputs.data }}'"
