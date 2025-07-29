@@ -150,7 +150,7 @@ jobs:
           # Check if the PR already exists
           
           echo "Checking if pull request already exists"
-          PR_LIST=$(gh pr list --state open --base main --head $BRANCH_NAME --repo $env.REPO)
+          PR_LIST=$(gh pr list --state open --base main --head $BRANCH_NAME --repo ${{ env.REPO }})
           PR_EXISTS=$(echo "$PR_LIST" | wc -c)
           if [ $PR_EXISTS -gt 1 ]; then
             echo "Pull request already exists"
