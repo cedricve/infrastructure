@@ -29,9 +29,9 @@ jobs:
           route: GET /repos/{owner}/{repo}/environments/${{ env.FULL_NAME }}
           owner: ${{ env.OWNER }}
           repo: ${{ env.REPO }}
-      - run: "echo Environment found: '${{ steps.get_release.outputs.data }}' "
+      - run: "echo Environment found: '${{ steps.get_release.outputs.data }}' && exit 0"
         if: ${{ success() }}
-      - run: "echo Environment could not be found. Request failed with status '${{ steps.get_release.outputs.status }}', proceeding to create. && exit 1" 
+      - run: "echo Environment could not be found. Request failed with status '${{ steps.get_release.outputs.status }}', proceeding to create. && exit 0" 
         if: ${{ failure() }}
   # This will create a GitHub environment through the GitHub API if does not exist
   # Find more information here: https://docs.github.com/en/rest/deployments/environments?apiVersion=2022-11-28#create-or-update-an-environment
