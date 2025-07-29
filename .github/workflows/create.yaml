@@ -119,14 +119,14 @@ jobs:
     runs-on: ubuntu-latest
     env:
       REPO: ${{ github.repository }}
-      GH_TOKEN: ${{ secrets.TOKEN }}
+      #GH_TOKEN: ${{ secrets.TOKEN }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
           repository: ${{ env.REPO }}
           ref: "main"
-          token: ${{ env.GH_TOKEN }}
+          #token: ${{ env.GH_TOKEN }}
       - name: Create directories
         run: |
           mkdir -p aro-spoke/${{ github.event.inputs.project_name }}/${{ github.event.inputs.environment_name }}
