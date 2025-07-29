@@ -62,7 +62,7 @@ jobs:
                 "protected_branches": false,
                 "custom_branch_policies": false,
               },
-              "reviewers":[{"type":"Team","id": ${{ env.TEAM_REVIEWER_ID }}}],
+          #    "reviewers":[{"type":"Team","id": ${{ env.TEAM_REVIEWER_ID }}}],
             }
 
       - run: "echo Environment created successfully: '${{ steps.get_release.outputs.data }}'"
