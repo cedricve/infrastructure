@@ -167,5 +167,5 @@ jobs:
           gh version
           #gh auth login --with-token < ${{ secrets.TOKEN }}
           gh pr create --title "Creating a new environment for project ${{ github.event.inputs.project_name }}" \
-            --body "This PR creates a new environment for project `${{ github.event.inputs.project_name }}` with the name `${{ github.event.inputs.environment_name }}`." \
+            --body "This PR creates a new environment for a project." \
             --base main --head $BRANCH_NAME --repo ${{ env.REPO }}
